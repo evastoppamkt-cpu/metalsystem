@@ -1,0 +1,596 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+--bg:#f8f8f7;--bg2:#ffffff;--bg3:#f4f3f1;--bg4:#eeede9;
+--border:#e5e4e0;--border2:#d4d3ce;
+--text:#1a1a18;--text2:#6b6b63;--text3:#9b9b92;
+--accent:#1a1a18;
+--green:#16a34a;--green-bg:#f0fdf4;--green-border:#bbf7d0;
+--amber:#d97706;--amber-bg:#fffbeb;--amber-border:#fde68a;
+--red:#dc2626;--red-bg:#fef2f2;--red-border:#fecaca;
+--blue:#2563eb;--blue-bg:#eff6ff;--blue-border:#bfdbfe;
+--r:8px;--rl:12px;--rxl:16px;
+}
+body{font-family:var(--font-sans),system-ui,sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
+
+.shell{min-height:100vh;background:var(--bg)}
+
+.login-wrap{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:2rem;background:var(--bg)}
+.login-box{background:var(--bg2);border:1px solid var(--border);border-radius:var(--rxl);padding:2.5rem;width:100%;max-width:360px}
+.login-mark{display:flex;align-items:center;gap:10px;margin-bottom:2rem}
+.login-mark-sq{width:36px;height:36px;background:var(--text);border-radius:var(--r);display:flex;align-items:center;justify-content:center}
+.login-mark-sq i{color:var(--bg2);font-size:18px}
+.login-name{font-size:16px;font-weight:500;color:var(--text)}
+.login-sub{font-size:12px;color:var(--text3)}
+.lf{margin-bottom:1rem}
+.lf label{display:block;font-size:12px;color:var(--text2);letter-spacing:.03em;margin-bottom:6px}
+.lf input{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:var(--r);padding:10px 12px;font-size:14px;color:var(--text);outline:none;transition:border .15s}
+.lf input:focus{border-color:var(--border2)}
+.lbtn{width:100%;padding:11px;background:var(--text);color:var(--bg2);border:none;border-radius:var(--r);font-size:14px;font-weight:500;cursor:pointer;margin-top:.5rem;transition:opacity .15s}
+.lbtn:hover{opacity:.85}
+.lerr{font-size:12px;color:var(--red);margin-top:8px;text-align:center;display:none}
+
+.app-shell{display:none}
+.navbar{background:var(--bg2);border-bottom:1px solid var(--border);padding:0 1.5rem;height:54px;display:flex;align-items:center;justify-content:space-between}
+.nb-brand{display:flex;align-items:center;gap:10px}
+.nb-mark{width:28px;height:28px;background:var(--text);border-radius:6px;display:flex;align-items:center;justify-content:center}
+.nb-mark i{color:var(--bg2);font-size:14px}
+.nb-name{font-size:14px;font-weight:500;color:var(--text)}
+.nb-sep{width:1px;height:18px;background:var(--border);margin:0 6px}
+.nb-sub{font-size:12px;color:var(--text3)}
+.nb-nav{display:flex;gap:2px}
+.nb-btn{padding:6px 12px;background:transparent;border:none;color:var(--text2);font-size:13px;border-radius:var(--r);cursor:pointer;transition:all .15s}
+.nb-btn:hover{color:var(--text);background:var(--bg3)}
+.nb-btn.on{color:var(--text);background:var(--bg3);font-weight:500}
+.nb-right{display:flex;align-items:center;gap:8px}
+.nb-user{font-size:12px;color:var(--text3)}
+.nb-logout{background:transparent;border:1px solid var(--border);color:var(--text2);padding:5px 10px;border-radius:var(--r);font-size:12px;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:5px}
+.nb-logout:hover{color:var(--text);border-color:var(--border2)}
+
+.page{display:none;padding:1.5rem;max-width:1100px;margin:0 auto}
+.page.on{display:block}
+
+.prev-grid{display:grid;grid-template-columns:290px 1fr;gap:1.25rem;align-items:start}
+@media(max-width:660px){.prev-grid{grid-template-columns:1fr}}
+
+.panel{background:var(--bg2);border:1px solid var(--border);border-radius:var(--rl);padding:1.5rem}
+.panel-label{font-size:11px;font-weight:500;color:var(--text3);letter-spacing:.07em;text-transform:uppercase;margin-bottom:1.25rem}
+
+.seg-group{margin-bottom:1.25rem}
+.seg-group>label{display:block;font-size:12px;color:var(--text2);margin-bottom:7px}
+.seg{display:grid;grid-template-columns:repeat(3,1fr);gap:4px}
+.seg-btn{padding:8px 4px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);font-size:12px;color:var(--text2);cursor:pointer;text-align:center;transition:all .15s;line-height:1.2}
+.seg-btn:hover{border-color:var(--border2);color:var(--text)}
+.seg-btn.on{background:var(--text);border-color:var(--text);color:var(--bg2);font-weight:500}
+
+.num-row{margin-bottom:.9rem}
+.num-row:last-child{margin-bottom:0}
+.num-row>label{display:block;font-size:12px;color:var(--text2);margin-bottom:6px}
+.num-row input{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:var(--r);padding:9px 12px;font-size:14px;color:var(--text);outline:none;transition:border .15s}
+.num-row input:focus{border-color:var(--text)}
+.num-row input::placeholder{color:var(--text3)}
+.divider{border:none;border-top:1px solid var(--border);margin:1.25rem 0}
+
+.results-stack{display:flex;flex-direction:column;gap:6px}
+.r-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--r);padding:13px 16px;display:flex;align-items:center;justify-content:space-between}
+.r-lbl{font-size:12px;color:var(--text2);display:flex;align-items:center;gap:7px}
+.r-lbl i{font-size:15px}
+.r-val{font-size:19px;font-weight:500;color:var(--text);letter-spacing:-.025em}
+.r-val.muted{font-size:15px;color:var(--text2)}
+
+.r-card.c-red{background:var(--red-bg);border-color:var(--red-border)}
+.r-card.c-red .r-lbl{color:var(--red)}
+.r-card.c-red .r-val{color:var(--red)}
+.r-card.c-amber{background:var(--amber-bg);border-color:var(--amber-border)}
+.r-card.c-amber .r-lbl{color:var(--amber)}
+.r-card.c-amber .r-val{color:var(--amber)}
+.r-card.c-blue{background:var(--blue-bg);border-color:var(--blue-border)}
+.r-card.c-blue .r-lbl{color:var(--blue)}
+.r-card.c-blue .r-val{color:var(--blue)}
+
+.badge-pill{font-size:10px;padding:2px 7px;border-radius:99px;font-weight:500;background:var(--red-bg);color:var(--red);border:1px solid var(--red-border)}
+
+.margin-section{padding:13px 16px;background:var(--bg);border:1px solid var(--border);border-radius:var(--r)}
+.margin-top-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.margin-track{height:4px;background:var(--bg4);border-radius:99px;overflow:hidden}
+.margin-fill{height:100%;border-radius:99px;transition:width .4s ease,background .4s}
+.margin-labels{display:flex;justify-content:space-between;margin-top:6px}
+.margin-label{font-size:10px;color:var(--text3)}
+
+.sep{height:1px;background:var(--border);margin:4px 0}
+
+.save-section{margin-top:1rem}
+.save-row{display:flex;flex-direction:column;gap:8px}
+.save-row input,.save-row textarea{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:var(--r);padding:9px 12px;font-size:13px;color:var(--text);outline:none;transition:border .15s;resize:none}
+.save-row input:focus,.save-row textarea:focus{border-color:var(--text)}
+.save-row textarea{height:52px}
+.save-row input::placeholder,.save-row textarea::placeholder{color:var(--text3)}
+.sbtn{padding:10px 16px;background:var(--text);color:var(--bg2);border:none;border-radius:var(--r);font-size:13px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:opacity .15s}
+.sbtn:hover{opacity:.85}
+
+.dash-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:1.5rem}
+.stat-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--rl);padding:1.25rem}
+.stat-lbl{font-size:11px;color:var(--text3);letter-spacing:.04em;margin-bottom:6px}
+.stat-val{font-size:22px;font-weight:500;color:var(--text);letter-spacing:-.03em;line-height:1}
+.stat-sub{font-size:11px;color:var(--text3);margin-top:5px}
+
+.hist-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:var(--rl);overflow:hidden}
+.hthead{display:grid;grid-template-columns:2fr 1fr 1fr 1fr 80px;padding:10px 16px;border-bottom:1px solid var(--border);gap:12px;background:var(--bg3)}
+.hthead span{font-size:11px;color:var(--text3);letter-spacing:.04em;font-weight:500;text-transform:uppercase}
+.hrow{display:grid;grid-template-columns:2fr 1fr 1fr 1fr 80px;padding:13px 16px;border-bottom:1px solid var(--border);gap:12px;align-items:center;transition:background .12s;cursor:pointer}
+.hrow:last-child{border-bottom:none}
+.hrow:hover{background:var(--bg3)}
+.hr-name{font-size:13px;font-weight:500;color:var(--text)}
+.hr-sub{font-size:11px;color:var(--text3);margin-top:3px;display:flex;gap:4px;flex-wrap:wrap}
+.hr-tag{padding:2px 6px;background:var(--bg3);border:1px solid var(--border);border-radius:4px;color:var(--text3);font-size:10px}
+.hr-num{font-size:13px;font-weight:500;color:var(--text)}
+.hr-date{font-size:11px;color:var(--text3)}
+
+.spill{font-size:10px;font-weight:500;padding:3px 9px;border-radius:99px}
+.sp-green{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border)}
+.sp-amber{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-border)}
+.sp-red{background:var(--red-bg);color:var(--red);border:1px solid var(--red-border)}
+.sp-gray{background:var(--bg3);color:var(--text3);border:1px solid var(--border)}
+
+.drawer{background:var(--bg3);border-bottom:1px solid var(--border);padding:1rem 1.5rem;display:none}
+.drawer.open{display:block}
+.dgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px;margin-bottom:1rem}
+.dg-lbl{font-size:11px;color:var(--text3);margin-bottom:3px}
+.dg-val{font-size:13px;font-weight:500;color:var(--text)}
+.note-box{font-size:13px;color:var(--text2);background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:10px 12px;margin-bottom:10px;min-height:36px;line-height:1.5;white-space:pre-wrap}
+.note-box em{color:var(--text3);font-style:normal}
+.drawer-acts{display:flex;gap:8px}
+.dbtn{padding:6px 12px;background:transparent;border:1px solid var(--border);color:var(--text2);border-radius:var(--r);font-size:12px;cursor:pointer;display:flex;align-items:center;gap:4px;transition:all .12s}
+.dbtn:hover{border-color:var(--border2);color:var(--text)}
+.dbtn.danger:hover{color:var(--red);border-color:var(--red-border);background:var(--red-bg)}
+.note-edit{width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:8px 10px;font-size:13px;color:var(--text);resize:none;outline:none;margin-bottom:8px;min-height:56px}
+.note-edit:focus{border-color:var(--text)}
+.save-note-btn{padding:6px 14px;background:var(--text);color:var(--bg2);border:none;border-radius:var(--r);font-size:12px;cursor:pointer;font-weight:500}
+
+.page-hdr{margin-bottom:1.25rem}
+.page-hdr h2{font-size:16px;font-weight:500;color:var(--text)}
+.page-hdr p{font-size:12px;color:var(--text3);margin-top:2px}
+.empty{text-align:center;padding:3rem 1rem;color:var(--text3)}
+.empty i{font-size:32px;display:block;margin-bottom:.75rem}
+
+@media(max-width:520px){
+  .hthead,.hrow{grid-template-columns:1fr 1fr 80px}
+  .hthead span:nth-child(3),.hthead span:nth-child(4),
+  .hrow>*:nth-child(3),.hrow>*:nth-child(4){display:none}
+}
+</style>
+
+<h2 class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden">Metalsistem — Centro Costi e Preventivatore</h2>
+
+<div class="shell" id="shell">
+
+<div class="login-wrap" id="loginWrap">
+  <div class="login-box">
+    <div class="login-mark">
+      <div class="login-mark-sq"><i class="ti ti-building-warehouse" aria-hidden="true"></i></div>
+      <div>
+        <div class="login-name">Metalsistem</div>
+        <div class="login-sub">Centro Costi & Preventivatore</div>
+      </div>
+    </div>
+    <div class="lf"><label>Utente</label><input id="lu" type="text" placeholder="nome utente" autocomplete="username"/></div>
+    <div class="lf"><label>Password</label><input id="lp" type="password" placeholder="••••••••" autocomplete="current-password"/></div>
+    <button class="lbtn" onclick="doLogin()">Accedi</button>
+    <div class="lerr" id="lerr">Credenziali non valide</div>
+  </div>
+</div>
+
+<div class="app-shell" id="appShell">
+  <div class="navbar">
+    <div class="nb-brand">
+      <div class="nb-mark"><i class="ti ti-building-warehouse" aria-hidden="true"></i></div>
+      <span class="nb-name">Metalsistem</span>
+      <div class="nb-sep"></div>
+      <span class="nb-sub">Centro Costi</span>
+    </div>
+    <div class="nb-nav">
+      <button class="nb-btn on" id="nb0" onclick="gotoPage(0)">Preventivo</button>
+      <button class="nb-btn" id="nb1" onclick="gotoPage(1)">Storico</button>
+    </div>
+    <div class="nb-right">
+      <span class="nb-user" id="nbUser"></span>
+      <button class="nb-logout" onclick="doLogout()"><i class="ti ti-logout" aria-hidden="true"></i> Esci</button>
+    </div>
+  </div>
+
+  <div class="page on" id="p0">
+    <div class="prev-grid">
+
+      <div style="display:flex;flex-direction:column;gap:1rem">
+        <div class="panel">
+          <div class="panel-label">Dati commessa</div>
+
+          <div class="seg-group">
+            <label>Dimensione</label>
+            <div class="seg">
+              <button class="seg-btn" data-g="dim" data-v="PICCOLO" onclick="pick(this,'dim')">Piccolo</button>
+              <button class="seg-btn on" data-g="dim" data-v="MEDIO" onclick="pick(this,'dim')">Medio</button>
+              <button class="seg-btn" data-g="dim" data-v="GRANDE" onclick="pick(this,'dim')">Grande</button>
+            </div>
+          </div>
+
+          <div class="seg-group">
+            <label>Distanza</label>
+            <div class="seg">
+              <button class="seg-btn" data-g="dist" data-v="VICINO" onclick="pick(this,'dist')">Vicino</button>
+              <button class="seg-btn on" data-g="dist" data-v="MEDIO" onclick="pick(this,'dist')">Medio</button>
+              <button class="seg-btn" data-g="dist" data-v="LONTANO" onclick="pick(this,'dist')">Lontano</button>
+            </div>
+          </div>
+
+          <div class="seg-group">
+            <label>Complessità</label>
+            <div class="seg">
+              <button class="seg-btn" data-g="compl" data-v="SEMPLICE" onclick="pick(this,'compl')">Semplice</button>
+              <button class="seg-btn on" data-g="compl" data-v="MEDIO" onclick="pick(this,'compl')">Medio</button>
+              <button class="seg-btn" data-g="compl" data-v="COMPLESSO" onclick="pick(this,'compl')">Complesso</button>
+            </div>
+          </div>
+
+          <hr class="divider">
+
+          <div class="num-row">
+            <label>Costo materiale (€)</label>
+            <input id="matCost" type="number" value="0" min="0" step="500" oninput="calc()"/>
+          </div>
+          <div class="num-row">
+            <label>Giorni montaggio</label>
+            <input id="days" type="number" value="2" min="0" step="1" oninput="calc()"/>
+          </div>
+          <div class="num-row">
+            <label>Numero persone montaggio</label>
+            <input id="persons" type="number" value="3" min="1" step="1" oninput="calc()"/>
+          </div>
+
+          <hr class="divider">
+
+          <div class="num-row">
+            <label>Prezzo di vendita (€) <span style="color:var(--text3);font-weight:400">— facoltativo</span></label>
+            <input id="sell" type="number" placeholder="es. 6000" min="0" step="500" oninput="calc()"/>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-label">Salva preventivo</div>
+          <div class="save-row">
+            <input id="saveName" type="text" placeholder="Nome cliente / commessa"/>
+            <textarea id="saveNote" placeholder="Note (facoltativo)…"></textarea>
+            <button class="sbtn" onclick="saveEntry()"><i class="ti ti-device-floppy" aria-hidden="true"></i> Salva in storico</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-label">Centro costi & preventivatore</div>
+        <div class="results-stack">
+
+          <div class="r-card">
+            <span class="r-lbl"><i class="ti ti-calculator" aria-hidden="true"></i> Costo reale commessa</span>
+            <span class="r-val" id="rCost">—</span>
+          </div>
+
+          <div class="sep"></div>
+
+          <div class="r-card c-red">
+            <div>
+              <div class="r-lbl" style="margin-bottom:4px"><i class="ti ti-lock" aria-hidden="true"></i> Prezzo minimo</div>
+              <span class="badge-pill">non scendere sotto</span>
+            </div>
+            <span class="r-val" id="rMin">—</span>
+          </div>
+
+          <div class="r-card c-amber">
+            <span class="r-lbl"><i class="ti ti-target" aria-hidden="true"></i> Prezzo target</span>
+            <span class="r-val" id="rTarget">—</span>
+          </div>
+
+          <div class="r-card c-blue">
+            <span class="r-lbl"><i class="ti ti-tag" aria-hidden="true"></i> Prezzo listino</span>
+            <span class="r-val" id="rList">—</span>
+          </div>
+
+          <div class="sep"></div>
+
+          <div class="r-card" id="rMECard">
+            <span class="r-lbl"><i class="ti ti-coin-euro" aria-hidden="true"></i> Margine €</span>
+            <span class="r-val" id="rME">—</span>
+          </div>
+
+          <div class="r-card" id="rMPCard">
+            <div style="flex:1">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+                <span class="r-lbl"><i class="ti ti-percent" aria-hidden="true"></i> Margine %</span>
+                <span class="r-val" id="rMP" style="font-size:17px">—</span>
+              </div>
+              <div class="margin-track" id="mtrack" style="display:none">
+                <div class="margin-fill" id="mfill"></div>
+              </div>
+              <div class="margin-labels" id="mlabels" style="display:none">
+                <span class="margin-label">0%</span>
+                <span class="margin-label">25% ottimo</span>
+                <span class="margin-label">50%</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="sep"></div>
+
+          <div class="r-card">
+            <span class="r-lbl"><i class="ti ti-scissors" aria-hidden="true"></i> Sconto massimo</span>
+            <span class="r-val" id="rDisc" style="font-size:15px">—</span>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="page" id="p1">
+    <div class="dash-stats" id="dashStats"></div>
+    <div class="page-hdr">
+      <h2>Storico preventivi</h2>
+      <p id="histCount"></p>
+    </div>
+    <div class="hist-wrap">
+      <div class="hthead">
+        <span>Cliente / Commessa</span>
+        <span>Costo reale</span>
+        <span>Prezzo target</span>
+        <span>Margine</span>
+        <span>Stato</span>
+      </div>
+      <div id="histBody"></div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<script>
+const USERS={metalsistem:'ms2024',admin:'scaffali'};
+
+const D={
+  personBase:{PICCOLO:487.823129,MEDIO:898.140590,GRANDE:2074.648526},
+  compl:{SEMPLICE:1,MEDIO:1.5,COMPLESSO:2},
+  dist:{
+    VICINO: {h:1,   km:30,  kc:15},
+    MEDIO:  {h:2.5, km:160, kc:80},
+    LONTANO:{h:3.5, km:300, kc:150}
+  },
+  vis:{
+    PICCOLO:{c:2,t:1},
+    MEDIO:  {c:4,t:2},
+    GRANDE: {c:6,t:3}
+  },
+  hr:{c:15.5556,t:36.5079},
+  instDay:220,
+  extraFix:{sic:160,trp:300},
+  extraPiatt:50,
+  mg:{min:0.20,tgt:0.30,lst:0.40}
+};
+
+const SEL={dim:'MEDIO',dist:'MEDIO',compl:'MEDIO'};
+let hist=JSON.parse(localStorage.getItem('ms3_hist')||'[]');
+let lastR=null;
+
+function doLogin(){
+  const u=document.getElementById('lu').value.trim().toLowerCase();
+  const p=document.getElementById('lp').value;
+  if(USERS[u]&&USERS[u]===p){
+    document.getElementById('loginWrap').style.display='none';
+    document.getElementById('appShell').style.display='block';
+    document.getElementById('nbUser').textContent=u;
+    calc();
+  } else {
+    document.getElementById('lerr').style.display='block';
+  }
+}
+['lp','lu'].forEach(id=>document.getElementById(id).addEventListener('keydown',e=>{if(e.key==='Enter')doLogin()}));
+
+function doLogout(){
+  document.getElementById('loginWrap').style.display='flex';
+  document.getElementById('appShell').style.display='none';
+}
+
+function gotoPage(n){
+  [0,1].forEach(i=>{
+    document.getElementById('p'+i).classList.toggle('on',i===n);
+    document.getElementById('nb'+i).classList.toggle('on',i===n);
+  });
+  if(n===1)renderHist();
+}
+
+function pick(el,g){
+  document.querySelectorAll('[data-g="'+g+'"]').forEach(b=>b.classList.remove('on'));
+  el.classList.add('on');
+  SEL[g]=el.dataset.v;
+  calc();
+}
+
+function fmt(n){return'€\u202f'+Math.round(n).toLocaleString('it-IT')}
+function fmtP(n){return(n*100).toFixed(1)+'\u202f%'}
+
+function calcModel(){
+  const mat=parseFloat(document.getElementById('matCost').value)||0;
+  const days=parseFloat(document.getElementById('days').value)||0;
+  const pers=Math.max(1,parseFloat(document.getElementById('persons').value)||1);
+  const sellStr=document.getElementById('sell').value;
+  const sell=sellStr!==''&&sellStr!==null?parseFloat(sellStr):null;
+
+  const pb=D.personBase[SEL.dim];
+  const mc=D.compl[SEL.compl];
+  const pc=pb*mc;
+
+  const dd=D.dist[SEL.dist];
+  const vv=D.vis[SEL.dim];
+  const csC=dd.h*vv.c*D.hr.c;
+  const csT=dd.h*vv.t*D.hr.t;
+  const ckm=dd.kc*(vv.c+vv.t);
+  const cSpost=csC+csT+ckm;
+  const cluster=pc+cSpost;
+
+  const piatt=pers>2?D.extraPiatt*days:0;
+  const mount=(days*pers*D.instDay)+D.extraFix.sic+D.extraFix.trp+piatt;
+  const total=cluster+mount+mat;
+
+  const pMin=total/(1-D.mg.min);
+  const pTgt=total/(1-D.mg.tgt);
+  const pLst=pTgt/(1-D.mg.lst);
+  const discPct=1-(pMin/pLst);
+  const discEur=pLst-pMin;
+
+  let mE=null,mP=null;
+  if(sell!==null&&sell>0){mE=sell-total;mP=mE/sell;}
+
+  return{mat,days,pers,sell,cluster,mount,total,pMin,pTgt,pLst,discPct,discEur,mE,mP,dim:SEL.dim,dist:SEL.dist,compl:SEL.compl};
+}
+
+function calc(){
+  const r=calcModel();
+  lastR=r;
+
+  document.getElementById('rCost').textContent=fmt(r.total);
+  document.getElementById('rMin').textContent=fmt(r.pMin);
+  document.getElementById('rTarget').textContent=fmt(r.pTgt);
+  document.getElementById('rList').textContent=fmt(r.pLst);
+  document.getElementById('rDisc').textContent=fmtP(r.discPct)+'  ('+fmt(r.discEur)+')';
+
+  const meEl=document.getElementById('rME');
+  const mpEl=document.getElementById('rMP');
+  const meCard=document.getElementById('rMECard');
+  const mpCard=document.getElementById('rMPCard');
+  const mtrack=document.getElementById('mtrack');
+  const mlabels=document.getElementById('mlabels');
+  const mfill=document.getElementById('mfill');
+
+  if(r.mE!==null){
+    meEl.textContent=fmt(r.mE);
+    mpEl.textContent=fmtP(r.mP);
+    const col=r.mP>=0.25?'var(--green)':r.mP>=0.10?'var(--amber)':'var(--red)';
+    const bgCol=r.mP>=0.25?'var(--green-bg)':r.mP>=0.10?'var(--amber-bg)':'var(--red-bg)';
+    const brdCol=r.mP>=0.25?'var(--green-border)':r.mP>=0.10?'var(--amber-border)':'var(--red-border)';
+    [meEl,mpEl].forEach(el=>el.style.color=col);
+    [meCard,mpCard].forEach(c=>{c.style.borderColor=brdCol;c.style.background=bgCol;});
+    mtrack.style.display='block';
+    mlabels.style.display='flex';
+    const w=Math.max(0,Math.min(100,r.mP*100*2));
+    mfill.style.width=w+'%';
+    mfill.style.background=col;
+  } else {
+    meEl.textContent='—';mpEl.textContent='—';
+    [meEl,mpEl].forEach(el=>el.style.color='');
+    [meCard,mpCard].forEach(c=>{c.style.borderColor='';c.style.background='';});
+    mtrack.style.display='none';mlabels.style.display='none';
+  }
+}
+
+function saveEntry(){
+  if(!lastR)return;
+  const name=document.getElementById('saveName').value.trim()||'Commessa senza nome';
+  const note=document.getElementById('saveNote').value.trim();
+  hist.unshift({id:Date.now(),name,note,date:new Date().toLocaleDateString('it-IT'),...lastR});
+  localStorage.setItem('ms3_hist',JSON.stringify(hist));
+  document.getElementById('saveName').value='';
+  document.getElementById('saveNote').value='';
+  const btn=document.querySelector('.sbtn');
+  btn.innerHTML='<i class="ti ti-check"></i> Salvato';
+  setTimeout(()=>{btn.innerHTML='<i class="ti ti-device-floppy"></i> Salva in storico'},1800);
+}
+
+function statusOf(r){
+  if(r.mP===null||r.mP===undefined||r.sell===null||!r.sell)return{label:'N/D',cls:'sp-gray'};
+  if(r.mP>=0.25)return{label:'Ottimo',cls:'sp-green'};
+  if(r.mP>=0.10)return{label:'Attenzione',cls:'sp-amber'};
+  return{label:'Rischio',cls:'sp-red'};
+}
+
+function renderHist(){
+  const n=hist.length;
+  const totTgt=hist.reduce((a,e)=>a+(e.pTgt||0),0);
+  const totCost=hist.reduce((a,e)=>a+(e.total||0),0);
+  const withM=hist.filter(e=>e.mP!=null);
+  const avgM=withM.length?withM.reduce((a,e)=>a+e.mP,0)/withM.length:null;
+  const colAvg=avgM===null?'inherit':avgM>=.25?'var(--green)':avgM>=.10?'var(--amber)':'var(--red)';
+
+  document.getElementById('dashStats').innerHTML=`
+    <div class="stat-card"><div class="stat-lbl">Preventivi salvati</div><div class="stat-val">${n}</div><div class="stat-sub">totale storico</div></div>
+    <div class="stat-card"><div class="stat-lbl">Fatturato target</div><div class="stat-val" style="font-size:${n?'16px':'22px'}">${n?fmt(totTgt):'—'}</div><div class="stat-sub">somma prezzi target</div></div>
+    <div class="stat-card"><div class="stat-lbl">Costo totale</div><div class="stat-val" style="font-size:${n?'16px':'22px'}">${n?fmt(totCost):'—'}</div><div class="stat-sub">somma costi reali</div></div>
+    <div class="stat-card"><div class="stat-lbl">Margine medio</div><div class="stat-val" style="color:${colAvg}">${avgM===null?'—':fmtP(avgM)}</div><div class="stat-sub">su commesse con prezzo</div></div>
+  `;
+  document.getElementById('histCount').textContent=n?n+' preventiv'+(n===1?'o':'i')+' salvat'+(n===1?'o':'i'):'';
+
+  if(!n){
+    document.getElementById('histBody').innerHTML='<div class="empty"><i class="ti ti-archive" aria-hidden="true"></i><p>Nessun preventivo salvato ancora.<br>Torna al preventivatore e salva il primo.</p></div>';
+    return;
+  }
+  document.getElementById('histBody').innerHTML=hist.map(e=>{
+    const s=statusOf(e);
+    return`<div>
+      <div class="hrow" onclick="toggleDrawer(${e.id})">
+        <div>
+          <div class="hr-name">${e.name}</div>
+          <div class="hr-sub">
+            <span class="hr-tag">${e.dim||''}</span>
+            <span class="hr-tag">${e.dist||''}</span>
+            <span class="hr-tag">${e.compl||''}</span>
+            <span class="hr-date">${e.date}</span>
+          </div>
+        </div>
+        <div><div class="hr-num">${fmt(e.total||0)}</div></div>
+        <div><div class="hr-num">${fmt(e.pTgt||0)}</div></div>
+        <div><div class="hr-num">${e.mP!=null?fmtP(e.mP):'—'}</div></div>
+        <div><span class="spill ${s.cls}">${s.label}</span></div>
+      </div>
+      <div class="drawer" id="drawer${e.id}">
+        <div class="dgrid">
+          <div><div class="dg-lbl">Costo reale</div><div class="dg-val">${fmt(e.total||0)}</div></div>
+          <div><div class="dg-lbl">Prezzo minimo</div><div class="dg-val" style="color:var(--red)">${fmt(e.pMin||0)}</div></div>
+          <div><div class="dg-lbl">Prezzo target</div><div class="dg-val" style="color:var(--amber)">${fmt(e.pTgt||0)}</div></div>
+          <div><div class="dg-lbl">Prezzo listino</div><div class="dg-val" style="color:var(--blue)">${fmt(e.pLst||0)}</div></div>
+          ${e.sell?`<div><div class="dg-lbl">Prezzo vendita</div><div class="dg-val">${fmt(e.sell)}</div></div>`:''}
+          ${e.mP!=null?`<div><div class="dg-lbl">Margine</div><div class="dg-val" style="color:${e.mP>=.25?'var(--green)':e.mP>=.10?'var(--amber)':'var(--red)'}">${fmtP(e.mP)}</div></div>`:''}
+          <div><div class="dg-lbl">Materiale</div><div class="dg-val">${fmt(e.mat||0)}</div></div>
+          <div><div class="dg-lbl">Montaggio</div><div class="dg-val">${e.days||0}gg × ${e.pers||0} pers.</div></div>
+          <div><div class="dg-lbl">Sconto max</div><div class="dg-val">${fmtP(e.discPct||0)}</div></div>
+        </div>
+        <div class="dg-lbl" style="margin-bottom:5px">Note</div>
+        <div class="note-box" id="nd${e.id}">${e.note||'<em>Nessuna nota</em>'}</div>
+        <textarea class="note-edit" id="ne${e.id}" style="display:none">${e.note||''}</textarea>
+        <div class="drawer-acts">
+          <button class="dbtn" id="neb${e.id}" onclick="startEdit(${e.id})"><i class="ti ti-edit" aria-hidden="true"></i> Modifica nota</button>
+          <button class="save-note-btn" id="nsb${e.id}" style="display:none" onclick="saveNote(${e.id})">Salva nota</button>
+          <button class="dbtn danger" onclick="delEntry(${e.id})"><i class="ti ti-trash" aria-hidden="true"></i> Elimina</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function toggleDrawer(id){document.getElementById('drawer'+id).classList.toggle('open')}
+function startEdit(id){
+  document.getElementById('nd'+id).style.display='none';
+  document.getElementById('ne'+id).style.display='block';
+  document.getElementById('neb'+id).style.display='none';
+  document.getElementById('nsb'+id).style.display='inline-block';
+}
+function saveNote(id){
+  const v=document.getElementById('ne'+id).value;
+  const i=hist.findIndex(e=>e.id===id);
+  if(i>=0){hist[i].note=v;localStorage.setItem('ms3_hist',JSON.stringify(hist));}
+  renderHist();
+  document.getElementById('drawer'+id).classList.add('open');
+}
+function delEntry(id){
+  hist=hist.filter(e=>e.id!==id);
+  localStorage.setItem('ms3_hist',JSON.stringify(hist));
+  renderHist();
+}
+</script>
